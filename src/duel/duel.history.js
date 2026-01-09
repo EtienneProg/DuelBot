@@ -9,24 +9,40 @@ async function createOrUpdateHistoryMessage(client, options = {}) {
 
     // Construction embed
     const embed = new EmbedBuilder()
-        .setTitle("🎮 Duel")
-        .setColor(status === "ONGOING" ? 0xFFD700 : winnerTeam === 1 ? 0x00FF00 : 0xFF0000)
-        .setTimestamp()
-        .setFooter({ text: "La Turbine - Duel" });
+      .setTitle("🎮 Duel")
+      .setColor(status === "ONGOING" ? 0xffd700 : 0x00ff00)
+      .setTimestamp()
+      .setFooter({ text: "Duel" });
 
     if (status === "ONGOING") {
-        embed.setDescription("⚔️ **Duel en cours !**")
-            .addFields(
-                { name: "Équipe 1", value: duelState.team1.map(u => `<@${u}>`).join("\n") || "—", inline: true },
-                { name: "Équipe 2", value: duelState.team2.map(u => `<@${u}>`).join("\n") || "—", inline: true }
-            );
+      embed.setDescription("⚔️ **Duel en cours !**").addFields(
+        {
+          name: "Équipe 1",
+          value: duelState.team1.map((u) => `<@${u}>`).join("\n") || "—",
+          inline: true,
+        },
+        { name: "", value: "vs", inline: true },
+        {
+          name: "Équipe 2",
+          value: duelState.team2.map((u) => `<@${u}>`).join("\n") || "—",
+          inline: true,
+        }
+      );
     } else if (status === "FINISHED") {
-        embed.setDescription(`🏆 **Équipe ${winnerTeam} a gagné !**`)
-            .addFields(
-                { name: "Équipe 1", value: duelState.team1.map(u => `<@${u}>`).join("\n") || "—", inline: true },
-                { name: "Équipe 2", value: duelState.team2.map(u => `<@${u}>`).join("\n") || "—", inline: true }
-            );
-        embed.setColor(winnerTeam === 1 ? 0x00FF00 : 0xFF0000);
+      embed.setDescription(`🏆 **Équipe ${winnerTeam} a gagné !**`).addFields(
+        {
+          name: "Équipe 1",
+          value: duelState.team1.map((u) => `<@${u}>`).join("\n") || "—",
+          inline: true,
+        },
+        { name: "", value: "vs", inline: true },
+        {
+          name: "Équipe 2",
+          value: duelState.team2.map((u) => `<@${u}>`).join("\n") || "—",
+          inline: true,
+        }
+      );
+      embed.setColor(winnerTeam === 1 ? 0x00ff00 : 0xff0000);
     }
 
     if (!duelState.historyMessage) {
