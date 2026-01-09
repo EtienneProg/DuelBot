@@ -13,7 +13,7 @@ jobs:
       - name: Download SQLite DB
         run: |
           curl -f \
-            "https://ton-app.up.railway.app/export/db?key=${{ secrets.EXPORT_KEY }}" \
+            "https://laturbine-leaderboard.up.railway.app/export/db?key=${{ secrets.EXPORT_KEY }}" \
             -o scores.db
 
       - name: Upload backup
