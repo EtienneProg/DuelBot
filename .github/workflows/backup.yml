@@ -10,12 +10,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # 🔹 Step de debug : vérifie que le secret est bien lu
+      - name: Debug key
+        run: |
+          echo "Key is ${{ secrets.EXPORT_KEY }}"
+
+      # 🔹 Step qui télécharge la DB
       - name: Download SQLite DB
         run: |
-          curl -f \
-            "https://laturbine-leaderboard.up.railway.app/export/db?key=${{ secrets.EXPORT_KEY }}" \
-            -o scores.db
+          curl -f "https://laturbine-leaderboard.up.railway.app/export/db?key=${{ secrets.EXPORT_KEY }}" -o scores.db
 
+      # 🔹 Step pour sauvegarder comme artifact
       - name: Upload backup
         uses: actions/upload-artifact@v4
         with:
