@@ -1,0 +1,23 @@
+name: Daily SQLite Backup
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # tous les jours à 02:00 UTC
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download SQLite DB
+        run: |
+          curl -f \
+            "https://ton-app.up.railway.app/export/db?key=${{ secrets.EXPORT_KEY }}" \
+            -o scores.db
+
+      - name: Upload backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqlite-backup
+          path: scores.db
