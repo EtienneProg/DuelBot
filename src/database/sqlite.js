@@ -1,11 +1,12 @@
 const sqlite3 = require("sqlite3").verbose();
+const DB_PATH = process.env.DB_PATH || "/data/scores.db";
 
-const db = new sqlite3.Database("./scores.db", err => {
-    if (err) {
-        console.error("❌ Erreur SQLite", err);
-    } else {
-        console.log("📦 Base SQLite connectée");
-    }
+const db = new sqlite3.Database(DB_PATH, (err) => {
+  if (err) {
+    console.error("❌ Erreur SQLite", err);
+  } else {
+    console.log("📦 Base SQLite connectée");
+  }
 });
 
 db.run(`
