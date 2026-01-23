@@ -2,8 +2,8 @@ const db = require("../database/sqlite");
 const duelState = require("./duel.state");
 const { deleteHistoryMessage } = require("./duel.history");
 const { createCanvas, loadImage, registerFont } = require("canvas");
-const { AttachmentBuilder } = require("discord.js");
-const { getTop10Players } = require("../database/users/user.database");
+const { AttachmentBuilder, EmbedBuilder} = require("discord.js");
+const { getTop10Players, getUsers} = require("../database/users/user.database");
 const path = require("path");
 
 registerFont(path.resolve("./public/fonts/Roboto-Regular.ttf"), {
@@ -108,7 +108,7 @@ async function updateLeaderBoard(client) {
     console.error("❌ Impossible de vider le channel :", err);
   }
 
-  await createLeaderboardImage(channel);
+  await test(channel);
 }
 
 async function createLeaderboardImage(channel) {
@@ -181,6 +181,35 @@ async function createLeaderboardImage(channel) {
     });
 
     await channel.send({ files: [attachment] });
+}
+
+async function test (channel){
+
+    const rows = await getUsers();
+
+    const badges = ['🥇', '🥈', '🥉'];
+
+// Création du tableau
+    let leaderboardText = 'Rang | Score  | Utilisateur\n\n';
+
+    rows.forEach((entry, index) => {
+        const badge = badges[index] || `#${index + 1}`;
+        const rank = badge.padEnd(3, ' ');
+        const score = entry.score.toString().padStart(7, ' ');
+        const name = `<@${entry.user_id}>`.padEnd(32, ' ');
+
+        leaderboardText += `${rank} | ${score} | ${name}\n`;
+    });
+
+
+    const leaderboardEmbed = new EmbedBuilder()
+        .setTitle('🏆 Leaderboard')
+        .setDescription(leaderboardText)
+        .setColor(0x00FF00)
+        .setFooter({ text: 'Mise à jour automatique du leaderboard' })
+        .setTimestamp();
+
+    await channel.send({ embeds: [leaderboardEmbed] });
 }
 
 

@@ -105,4 +105,22 @@ async function getTop10Players() {
     });
 }
 
-module.exports = { upsertUserFromMember,getUsersByIds, getTop10Players };
+async function getUsers() {
+    return await new Promise((resolve, reject) => {
+        db.all(
+            `
+      SELECT 
+          *
+      FROM users
+      ORDER BY score DESC
+      `,
+            [],
+            (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows);
+            }
+        );
+    });
+}
+
+module.exports = { upsertUserFromMember,getUsersByIds, getTop10Players, getUsers };

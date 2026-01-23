@@ -38,7 +38,6 @@ async function startDuel(channel) {
 async function recupereDuel(client) {
     const duel = await getDuelEnCours()
     if (!duel) return;
-    console.log(duel);
     duelState.active= true;
     duelState.teamSize = 0;
     duelState.team1 = JSON.parse(duel.team1_ids);

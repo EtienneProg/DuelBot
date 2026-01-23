@@ -51,7 +51,7 @@ db.all(`PRAGMA table_info(duels)`, (err, columns) => {
   const exists = columns.some((col) => col.name === "id_message");
 
   if (!exists) {
-    db.run(`ALTER TABLE duels ADD COLUMN id_message TEXT NOT NULL`);
+    db.run(`ALTER TABLE duels ADD COLUMN id_message TEXT NOT NULL default ''`);
   }
 });
 
