@@ -39,7 +39,7 @@ const header = `
 
 <body class="h-screen min-[1568px]:overflow-hidden max-[1567px]:h-max bg-gradient-to-br from-purple-700 via-purple-800 to-purple-900 flex items-center justify-center">
 
-  <div class="p-10 max-[428px]:px-2 w-screen h-screen max-[1567px]:h-max box-border bg-[url('https://lh3.googleusercontent.com/p/AF1QipPoJU8K0BIfOFuiSwLFmnAH_nyq0xHyh6v8hiXS=s1360-w1360-h1020-rw')] bg-cover bg-center">
+  <div class="p-8 max-[428px]:px-2 w-screen h-screen max-[1567px]:h-max box-border bg-[url('https://lh3.googleusercontent.com/p/AF1QipPoJU8K0BIfOFuiSwLFmnAH_nyq0xHyh6v8hiXS=s1360-w1360-h1020-rw')] bg-cover bg-center">
   <div class="flex max-[1567px]:flex-col h-full w-full gap-10">
 `
 

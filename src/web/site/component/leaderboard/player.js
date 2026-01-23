@@ -14,7 +14,7 @@ const date = {
 */
 
 const playerComponent = (data) => `
-    <tr class="bg-[#2a1747] rounded-2xl ${data.rankStyle}">
+    <tr class="bg-[#2a1747]/75 rounded-2xl ${data.rankStyle}">
         <!-- RANK -->
         <td class="w-[60px] text-center text-${data.color}-400 text-3xl font-bold py-2 rounded-l-2xl">
            ${data.rank}
@@ -23,7 +23,7 @@ const playerComponent = (data) => `
         <!-- PLAYER -->
         <td class="py-2">
             <div class="flex items-center gap-4">
-                <span class="h-14 aspect-square rounded-full border-4 border-${data.color}-400 bg-[url('${data.avatar}')] bg-cover bg-center"></span>
+                <span class="h-14 aspect-square rounded-full border-4 border-${data.color}-400 bg-[url(${data.avatar ? "'" + data.avatar + "'" : "/images/user.png"})] bg-cover bg-center"></span>
                 <div class="flex flex-col">
                     <span class="text-white text-2xl font-bold inline-block max-w-[250px] truncate whitespace-nowrap">
                         ${data.username}

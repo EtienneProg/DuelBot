@@ -10,12 +10,12 @@ const leaderboardheader = `
         <span class="absolute bottom-4 right-4 w-6 h-6 border-b-4 border-r-4 border-purple-400"></span>
 
         <!-- TITLE -->
-        <h1 class="h-max py-6 text-center flex justify-center items-center text-5xl max-[1567px]:text-4xl max-[405px]:text-2xl text-white font-extrabold tracking-widest drop-shadow-[0_0_15px_#a855f7]">
+        <h1 class="h-max py-2 text-center flex justify-center items-center text-5xl max-[1567px]:text-4xl max-[405px]:text-2xl text-white font-extrabold tracking-widest drop-shadow-[0_0_15px_#a855f7]">
           TOP 10 LEADERBOARD
         </h1>
 
         <!-- LEADERBOARD GRID -->
-        <div class="h-full w-full">
+        <div class="h-full w-full bg-[url(/images/logo-game-center-la-turbine.png)] bg-center bg-no-repeat bg-[length:60%]">
           <table class="w-full h-full border-separate border-spacing-y-[1vh]">
             <tbody>
 `

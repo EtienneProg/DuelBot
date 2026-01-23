@@ -44,6 +44,7 @@ async function recupereDuel(client) {
     duelState.team1 = JSON.parse(duel.team1_ids);
     duelState.team2 = JSON.parse(duel.team2_ids);
     duelState.duelID =duel.id;
+    duelState.messageID = duel.id_message;
 
     const channel = await client.channels.fetch(process.env.ALLOWED_CHANNEL_ID);
     await updateMenuMessage(client);

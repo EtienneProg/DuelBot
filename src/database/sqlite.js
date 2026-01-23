@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3").verbose();
-const DB_PATH = process.env.DB_PATH || "/data/scores.db";
+const DB_PATH = process.env.DB_PATH || "./scores.db";
 
 const db = new sqlite3.Database(DB_PATH, (err) => {
   if (err) {
@@ -28,10 +28,10 @@ CREATE TABLE IF NOT EXISTS duels (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
     team1_ids TEXT NOT NULL,   -- JSON array: ["id1","id2"]
-team2_ids TEXT NOT NULL,   -- JSON array: ["id3","id4"]
+    team2_ids TEXT NOT NULL,   -- JSON array: ["id3","id4"]
 
-winner_team INTEGER,       -- 1 ou 2, NULL si pas terminé
-is_finished INTEGER DEFAULT 0
+    winner_team INTEGER,       -- 1 ou 2, NULL si pas terminé
+    is_finished INTEGER DEFAULT 0
 )`);
 
 db.run(`
@@ -44,5 +44,15 @@ db.run(`
     is_active INTEGER DEFAULT 0 
     );
 `);
+
+db.all(`PRAGMA table_info(duels)`, (err, columns) => {
+  if (err) return console.error(err);
+
+  const exists = columns.some((col) => col.name === "id_message");
+
+  if (!exists) {
+    db.run(`ALTER TABLE duels ADD COLUMN id_message TEXT NOT NULL`);
+  }
+});
 
 module.exports = db;

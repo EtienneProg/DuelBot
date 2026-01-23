@@ -83,27 +83,26 @@ async function getTop10Players() {
         );
     });
 
-    const players = rows.map((row, index) => {
+    return rows.map((row, index) => {
         let color = 'cyan';
         if (index === 0) color = 'yellow';
         else if (index === 1) color = 'gray';
         else if (index === 2) color = 'orange';
 
         return {
+            user_id: row.user_id,
             rank: index + 1,
             username: row.username,
-            avatar: row.avatar || 'https://i.pravatar.cc/100?img=1',
-            score: row.score.toLocaleString('fr-FR'),
+            avatar: row.avatar || "",
+            score: row.score.toLocaleString("fr-FR"),
             color,
-            lastMatchIcon: row.last_match_win === 1 ? '🏆' : '❌',
-            lastMatch: row.last_match ?? '—',
+            lastMatchIcon: row.last_match_win === 1 ? "🏆" : "❌",
+            lastMatch: row.last_match ?? "—",
             victory: row.nb_win ?? 0,
             lost: row.nb_lose ?? 0,
-            level: 'Bronze'
+            level: "Bronze",
         };
     });
-
-    return players;
 }
 
 module.exports = { upsertUserFromMember,getUsersByIds, getTop10Players };
