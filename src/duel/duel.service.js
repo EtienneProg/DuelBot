@@ -1,9 +1,14 @@
 const db = require("../database/sqlite");
 const duelState = require("./duel.state");
 const { deleteHistoryMessage } = require("./duel.history");
-const { createCanvas, loadImage } = require("canvas");
+const { createCanvas, loadImage, registerFont } = require("canvas");
 const { AttachmentBuilder } = require("discord.js");
 const { getTop10Players } = require("../database/users/user.database");
+const path = require("path");
+
+registerFont(path.join(__dirname, "../public/fonts/Roboto-Regular.ttf"), {
+    family: "Roboto",
+});
 
 async function createDuelInDb(team1Ids, team2Ids) {
   return new Promise((resolve, reject) => {
@@ -123,7 +128,7 @@ async function createLeaderboardImage(channel) {
 
     /* ===== TITRE ===== */
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 48px Sans";
+    ctx.font = "bold 48px Roboto";
     ctx.textAlign = "center";
     ctx.fillText("🏆 LEADERBOARD 🏆", width / 2, 70);
 
@@ -137,7 +142,7 @@ async function createLeaderboardImage(channel) {
 
         /* ===== BADGE ===== */
         const badges = ["🥇", "🥈", "🥉"];
-        ctx.font = "40px Sans";
+        ctx.font = "40px Roboto";
         ctx.fillText(badges[i] || `#${i + 1}`, 70, y + 35);
 
         /* ===== AVATAR ===== */
@@ -153,13 +158,13 @@ async function createLeaderboardImage(channel) {
         ctx.restore();
 
         /* ===== NOM ===== */
-        ctx.font = "bold 26px Sans";
+        ctx.font = "bold 26px Roboto";
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "left";
         ctx.fillText(user.username, 200, y + 40);
 
         /* ===== SCORE ===== */
-        ctx.font = "24px Sans";
+        ctx.font = "24px Roboto";
         ctx.fillStyle = "#00ffcc";
         ctx.textAlign = "right";
         ctx.fillText(`${player.score} pts`, width - 80, y + 40);
