@@ -6,7 +6,7 @@ const { AttachmentBuilder } = require("discord.js");
 const { getTop10Players } = require("../database/users/user.database");
 const path = require("path");
 
-registerFont(path.join(__dirname, "../public/fonts/Roboto-Regular.ttf"), {
+registerFont(path.resolve("public/fonts/Roboto-Regular.ttf"), {
     family: "Roboto",
 });
 
