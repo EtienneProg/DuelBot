@@ -10,8 +10,6 @@ registerFont(path.resolve("./public/fonts/Roboto-Regular.ttf"), {
     family: "Roboto",
 });
 
-registerFont("./public/fonts/NotoColorEmoji.ttf", { family: "NotoColorEmoji" });
-
 async function createDuelInDb(team1Ids, team2Ids) {
   return new Promise((resolve, reject) => {
     db.run(
@@ -130,9 +128,9 @@ async function createLeaderboardImage(channel) {
 
     /* ===== TITRE ===== */
     ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 48px NotoColorEmoji";
+    ctx.font = "bold 48px Roboto";
     ctx.textAlign = "center";
-    ctx.fillText("🏆 LEADERBOARD 🏆", width / 2, 70);
+    ctx.fillText("LEADERBOARD", width / 2, 70);
 
     let startY = 140;
 
@@ -142,10 +140,8 @@ async function createLeaderboardImage(channel) {
 
         const y = startY + i * 80;
 
-        /* ===== BADGE ===== */
-        const badges = ["🥇", "🥈", "🥉"];
-        ctx.font = "40px NotoColorEmoji";
-        ctx.fillText(badges[i] || `#${i + 1}`, 70, y + 35);
+        ctx.font = "40px Roboto";
+        ctx.fillText(`#${i + 1}`, 70, y + 35);
 
         /* ===== AVATAR ===== */
         const avatar = await loadImage(
@@ -160,13 +156,13 @@ async function createLeaderboardImage(channel) {
         ctx.restore();
 
         /* ===== NOM ===== */
-        ctx.font = "bold 26px NotoColorEmoji";
+        ctx.font = "bold 26px Roboto";
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "left";
         ctx.fillText(user.username, 200, y + 40);
 
         /* ===== SCORE ===== */
-        ctx.font = "24px NotoColorEmoji";
+        ctx.font = "24px Roboto";
         ctx.fillStyle = "#00ffcc";
         ctx.textAlign = "right";
         ctx.fillText(`${player.score} pts`, width - 80, y + 40);
