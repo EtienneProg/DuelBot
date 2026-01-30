@@ -1,9 +1,9 @@
 const db = require("../database/sqlite");
 const duelState = require("./duel.state");
 const { deleteHistoryMessage } = require("./duel.history");
-const { createCanvas, loadImage, registerFont } = require("canvas");
-const { AttachmentBuilder, EmbedBuilder} = require("discord.js");
-const { getTop10Players, getUsers} = require("../database/users/user.database");
+const { registerFont } = require("canvas");
+const { EmbedBuilder} = require("discord.js");
+const { getUsers} = require("../database/users/user.database");
 const path = require("path");
 
 registerFont(path.resolve("./public/fonts/Roboto-Regular.ttf"), {
@@ -108,82 +108,82 @@ async function updateLeaderBoard(client) {
     console.error("❌ Impossible de vider le channel :", err);
   }
 
-  await test(channel);
+  await createLeaderboardImage(channel);
 }
 
-async function createLeaderboardImage(channel) {
-    const players = await getTop10Players();
+// async function createLeaderboardImage(channel) {
+//     const players = await getTop10Players();
+//
+//     const width = 800;
+//     const height = 1000;
+//     const canvas = createCanvas(width, height);
+//     const ctx = canvas.getContext("2d");
+//
+//     /* ===== FOND ===== */
+//     const gradient = ctx.createLinearGradient(0, 0, 0, height);
+//     gradient.addColorStop(0, "#0f2027");
+//     gradient.addColorStop(1, "#203a43");
+//     ctx.fillStyle = gradient;
+//     ctx.fillRect(0, 0, width, height);
+//
+//     /* ===== TITRE ===== */
+//     ctx.fillStyle = "#ffffff";
+//     ctx.font = "bold 48px Roboto";
+//     ctx.textAlign = "center";
+//     ctx.fillText("LEADERBOARD", width / 2, 70);
+//
+//     let startY = 140;
+//
+//     for (let i = 0; i < players.length; i++) {
+//         const player = players[i];
+//         const user = await channel.client.users.fetch(player.user_id);
+//
+//         const y = startY + i * 80;
+//
+//         ctx.font = "40px Roboto";
+//         ctx.fillText(`#${i + 1}`, 70, y + 35);
+//
+//         /* ===== AVATAR ===== */
+//         const avatar = await loadImage(
+//             user.displayAvatarURL({ extension: "png", size: 128 })
+//         );
+//         ctx.save();
+//         ctx.beginPath();
+//         ctx.arc(140, y + 30, 30, 0, Math.PI * 2);
+//         ctx.closePath();
+//         ctx.clip();
+//         ctx.drawImage(avatar, 110, y, 60, 60);
+//         ctx.restore();
+//
+//         /* ===== NOM ===== */
+//         ctx.font = "bold 26px Roboto";
+//         ctx.fillStyle = "#ffffff";
+//         ctx.textAlign = "left";
+//         ctx.fillText(user.username, 200, y + 40);
+//
+//         /* ===== SCORE ===== */
+//         ctx.font = "24px Roboto";
+//         ctx.fillStyle = "#00ffcc";
+//         ctx.textAlign = "right";
+//         ctx.fillText(`${player.score} pts`, width - 80, y + 40);
+//
+//         /* ===== SEPARATEUR ===== */
+//         ctx.strokeStyle = "rgba(255,255,255,0.1)";
+//         ctx.beginPath();
+//         ctx.moveTo(60, y + 70);
+//         ctx.lineTo(width - 60, y + 70);
+//         ctx.stroke();
+//     }
+//
+//     /* ===== ENVOI ===== */
+//     const attachment = new AttachmentBuilder(canvas.toBuffer(), {
+//         name: "leaderboard.png",
+//     });
+//
+//     await channel.send({ files: [attachment] });
+// }
 
-    const width = 800;
-    const height = 1000;
-    const canvas = createCanvas(width, height);
-    const ctx = canvas.getContext("2d");
-
-    /* ===== FOND ===== */
-    const gradient = ctx.createLinearGradient(0, 0, 0, height);
-    gradient.addColorStop(0, "#0f2027");
-    gradient.addColorStop(1, "#203a43");
-    ctx.fillStyle = gradient;
-    ctx.fillRect(0, 0, width, height);
-
-    /* ===== TITRE ===== */
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 48px Roboto";
-    ctx.textAlign = "center";
-    ctx.fillText("LEADERBOARD", width / 2, 70);
-
-    let startY = 140;
-
-    for (let i = 0; i < players.length; i++) {
-        const player = players[i];
-        const user = await channel.client.users.fetch(player.user_id);
-
-        const y = startY + i * 80;
-
-        ctx.font = "40px Roboto";
-        ctx.fillText(`#${i + 1}`, 70, y + 35);
-
-        /* ===== AVATAR ===== */
-        const avatar = await loadImage(
-            user.displayAvatarURL({ extension: "png", size: 128 })
-        );
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(140, y + 30, 30, 0, Math.PI * 2);
-        ctx.closePath();
-        ctx.clip();
-        ctx.drawImage(avatar, 110, y, 60, 60);
-        ctx.restore();
-
-        /* ===== NOM ===== */
-        ctx.font = "bold 26px Roboto";
-        ctx.fillStyle = "#ffffff";
-        ctx.textAlign = "left";
-        ctx.fillText(user.username, 200, y + 40);
-
-        /* ===== SCORE ===== */
-        ctx.font = "24px Roboto";
-        ctx.fillStyle = "#00ffcc";
-        ctx.textAlign = "right";
-        ctx.fillText(`${player.score} pts`, width - 80, y + 40);
-
-        /* ===== SEPARATEUR ===== */
-        ctx.strokeStyle = "rgba(255,255,255,0.1)";
-        ctx.beginPath();
-        ctx.moveTo(60, y + 70);
-        ctx.lineTo(width - 60, y + 70);
-        ctx.stroke();
-    }
-
-    /* ===== ENVOI ===== */
-    const attachment = new AttachmentBuilder(canvas.toBuffer(), {
-        name: "leaderboard.png",
-    });
-
-    await channel.send({ files: [attachment] });
-}
-
-async function test (channel){
+async function createLeaderboardImage (channel){
 
     const rows = await getUsers();
 
