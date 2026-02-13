@@ -46,8 +46,6 @@ async function getRecentDuels() {
                         };
                     });
 
-                    team1.push(team1[0]);
-
                     const team2 = team2Ids.map((id) => {
                         const user = users.find((u) => u.user_id === id);
                         return {
@@ -56,8 +54,6 @@ async function getRecentDuels() {
                             win: duel.winner_team === 2,
                         };
                     });
-
-                    team2.push(team2[0]);
 
                     results.push({
                         duelEnCours: duel.is_finished === 0,
