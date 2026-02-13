@@ -89,6 +89,8 @@ async function getTop10Players() {
         else if (index === 1) color = 'gray';
         else if (index === 2) color = 'orange';
 
+        const rank = getRank(row.score);
+
         return {
             user_id: row.user_id,
             rank: index + 1,
@@ -100,7 +102,7 @@ async function getTop10Players() {
             lastMatch: row.last_match ?? "—",
             victory: row.nb_win ?? 0,
             lost: row.nb_lose ?? 0,
-            level: "Bronze",
+            level: rank,
         };
     });
 }
@@ -119,6 +121,25 @@ async function getUsers() {
                 if (err) reject(err);
                 else resolve(rows);
             }
+        );
+    });
+}
+
+async function getRank(score) {
+    return new Promise((resolve, reject) => {
+        db.get(
+            `
+      SELECT id, name, min_elo, max_elo
+      FROM ranks
+      WHERE min_elo <= ?
+        AND (max_elo IS NULL OR max_elo >= ?)
+      LIMIT 1
+      `,
+            [score, score],
+            (err, row) => {
+                if (err) return reject(err);
+                resolve(row || null);
+            },
         );
     });
 }

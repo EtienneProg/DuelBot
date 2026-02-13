@@ -1,5 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 const DB_PATH = process.env.DB_PATH || "./scores.db";
+const runMigration = require("./migrations");
 
 const db = new sqlite3.Database(DB_PATH, (err) => {
   if (err) {
@@ -55,4 +56,7 @@ db.all(`PRAGMA table_info(duels)`, (err, columns) => {
   }
 });
 
+db.serialize(() => {
+    runMigration(db)
+});
 module.exports = db;

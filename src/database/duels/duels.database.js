@@ -5,11 +5,11 @@ async function getRecentDuels() {
     return new Promise((resolve, reject) => {
         db.all(
             `
-          SELECT *
-          FROM duels
-          ORDER BY created_at DESC
-          LIMIT 6
-          `,
+                SELECT *
+                FROM duels
+                ORDER BY created_at DESC
+                    LIMIT 6
+            `,
             async (err, duels) => {
                 if (err) return reject(err);
 
@@ -22,8 +22,14 @@ async function getRecentDuels() {
                     const team1Ids = JSON.parse(duel.team1_ids);
                     const team2Ids = JSON.parse(duel.team2_ids);
 
-                    const estTeam = team1Ids.length > 1 || team2Ids.length > 1;
-                    const duelSlots = estTeam ? 2 : 1;
+                    let duelSlots = 1;
+
+                    if (team1Ids.length > 1) {
+                        duelSlots++;
+                        if (team1Ids.length > 3) {
+                            duelSlots++;
+                        }
+                    }
 
                     if (usedSlots + duelSlots > 6) break;
 
@@ -31,35 +37,39 @@ async function getRecentDuels() {
 
                     const users = await getUsersByIds(usersIds);
 
-                    const team1 = team1Ids.map(id => {
-                        const user = users.find(u => u.user_id === id);
+                    const team1 = team1Ids.map((id) => {
+                        const user = users.find((u) => u.user_id === id);
                         return {
-                            username: user?.username ?? "Unknown",
+                            username: user?.username ?? 'Unknown',
                             avatar: user?.avatar ?? null,
-                            win: duel.winner_team === 1
+                            win: duel.winner_team === 1,
                         };
                     });
 
-                    const team2 = team2Ids.map(id => {
-                        const user = users.find(u => u.user_id === id);
+                    team1.push(team1[0]);
+
+                    const team2 = team2Ids.map((id) => {
+                        const user = users.find((u) => u.user_id === id);
                         return {
-                            username: user?.username ?? "Unknown",
+                            username: user?.username ?? 'Unknown',
                             avatar: user?.avatar ?? null,
-                            win: duel.winner_team === 2
+                            win: duel.winner_team === 2,
                         };
                     });
+
+                    team2.push(team2[0]);
 
                     results.push({
                         duelEnCours: duel.is_finished === 0,
                         team1,
                         team2,
-                        estTeam
+                        slot: duelSlots,
                     });
 
                     usedSlots += duelSlots;
                 }
                 resolve(results);
-            }
+            },
         );
     });
 }
