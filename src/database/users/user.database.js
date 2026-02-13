@@ -83,13 +83,16 @@ async function getTop10Players() {
         );
     });
 
-    return rows.map((row, index) => {
+    return await Promise.all(
+
+    rows.map(async (row, index) => {
+
         let color = 'cyan';
         if (index === 0) color = 'yellow';
         else if (index === 1) color = 'gray';
         else if (index === 2) color = 'orange';
 
-        const rank = getRank(row.score);
+        const rank = await getRank(row.score);
 
         return {
             user_id: row.user_id,
@@ -102,9 +105,9 @@ async function getTop10Players() {
             lastMatch: row.last_match ?? "—",
             victory: row.nb_win ?? 0,
             lost: row.nb_lose ?? 0,
-            level: rank,
+            level: rank.name ?? "",
         };
-    });
+    }));
 }
 
 async function getUsers() {
