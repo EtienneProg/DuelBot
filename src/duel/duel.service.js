@@ -108,7 +108,7 @@ async function updateLeaderBoard(client) {
     console.error("❌ Impossible de vider le channel :", err);
   }
 
-  await createLeaderboardImage(channel);
+  //await createLeaderboardImage(channel);
 }
 
 // async function createLeaderboardImage(channel) {
