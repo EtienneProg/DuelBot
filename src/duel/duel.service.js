@@ -108,7 +108,7 @@ async function updateLeaderBoard(client) {
     console.error("❌ Impossible de vider le channel :", err);
   }
 
-  //await createLeaderboardImage(channel);
+  await createLeaderboardImage(channel);
 }
 
 // async function createLeaderboardImage(channel) {
@@ -183,33 +183,39 @@ async function updateLeaderBoard(client) {
 //     await channel.send({ files: [attachment] });
 // }
 
-async function createLeaderboardImage (channel){
-
+async function createLeaderboardImage(channel) {
     const rows = await getUsers();
-
     const badges = ['🥇', '🥈', '🥉'];
+    const chunkSize = 20;
 
-// Création du tableau
-    let leaderboardText = 'Rang | Score  | Utilisateur\n\n';
+    for (let i = 0; i < rows.length; i += chunkSize) {
+        const chunk = rows.slice(i, i + chunkSize);
 
-    rows.forEach((entry, index) => {
-        const badge = badges[index] || `#${index + 1}`;
-        const rank = badge.padEnd(3, ' ');
-        const score = entry.score.toString().padStart(7, ' ');
-        const name = `<@${entry.user_id}>`.padEnd(32, ' ');
+        let leaderboardText = 'Rang | Score  | Utilisateur\n\n';
 
-        leaderboardText += `${rank} | ${score} | ${name}\n`;
-    });
+        chunk.forEach((entry, localIndex) => {
+            const globalIndex = i + localIndex;
+            const badge = badges[globalIndex] || `#${globalIndex + 1}`;
+            const rank = badge.padEnd(3, ' ');
+            const score = entry.score.toString().padStart(7, ' ');
+            const name = `<@${entry.user_id}>`.padEnd(32, ' ');
 
+            leaderboardText += `${rank} | ${score} | ${name}\n`;
+        });
 
-    const leaderboardEmbed = new EmbedBuilder()
-        .setTitle('🏆 Leaderboard')
-        .setDescription(leaderboardText)
-        .setColor(0x00FF00)
-        .setFooter({ text: 'Mise à jour automatique du leaderboard' })
-        .setTimestamp();
+        const pageLabel = rows.length > chunkSize
+            ? `🏆 Leaderboard (${Math.floor(i / chunkSize) + 1}/${Math.ceil(rows.length / chunkSize)})`
+            : '🏆 Leaderboard';
 
-    await channel.send({ embeds: [leaderboardEmbed] });
+        const leaderboardEmbed = new EmbedBuilder()
+            .setTitle(pageLabel)
+            .setDescription('```' + leaderboardText + '```')
+            .setColor(0x00FF00)
+            .setFooter({ text: 'Mise à jour automatique du leaderboard' })
+            .setTimestamp();
+
+        await channel.send({ embeds: [leaderboardEmbed] });
+    }
 }
 
 
