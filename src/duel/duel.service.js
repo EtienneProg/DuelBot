@@ -193,15 +193,25 @@ async function createLeaderboardImage(channel) {
 
         let leaderboardText = 'Rang | Score  | Utilisateur\n\n';
 
-        chunk.forEach((entry, localIndex) => {
+        for (let localIndex = 0; localIndex < chunk.length; localIndex++) {
+            const entry = chunk[localIndex];
             const globalIndex = i + localIndex;
             const badge = badges[globalIndex] || `#${globalIndex + 1}`;
             const rank = badge.padEnd(3, ' ');
             const score = entry.score.toString().padStart(7, ' ');
-            const name = `<@${entry.user_id}>`.padEnd(32, ' ');
 
+            // Récupération du nom d'utilisateur
+            let username;
+            try {
+                const user = await channel.client.users.fetch(entry.user_id);
+                username = user.displayName ?? user.username;
+            } catch {
+                username = `Utilisateur inconnu`;
+            }
+
+            const name = username.padEnd(20, ' ');
             leaderboardText += `${rank} | ${score} | ${name}\n`;
-        });
+        }
 
         const pageLabel = rows.length > chunkSize
             ? `🏆 Leaderboard (${Math.floor(i / chunkSize) + 1}/${Math.ceil(rows.length / chunkSize)})`
